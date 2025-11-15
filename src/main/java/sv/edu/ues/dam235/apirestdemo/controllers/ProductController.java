@@ -32,4 +32,43 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PostMapping
+    public ResponseEntity<ProductsDTO> createProduct(@RequestBody ProductsDTO productsDTO) {
+        try {
+            ProductsDTO newProduct = productServices.createProduct(productsDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+        } catch (Exception e) {
+            log.error("Error al crear el producto: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductsDTO> updateProduct(@PathVariable Integer id, @RequestBody ProductsDTO productsDTO) {
+        try {
+            ProductsDTO updatedProduct = productServices.updateProduct(id, productsDTO);
+            return ResponseEntity.ok(updatedProduct);
+        } catch (RuntimeException e) {
+            log.error("Error al actualizar el producto: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Error al actualizar el producto: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
+        try {
+            productServices.deleteProduct(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            log.error("Error al eliminar el producto: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Error al eliminar el producto: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
