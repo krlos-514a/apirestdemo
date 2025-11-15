@@ -27,10 +27,9 @@ public class ProductController {
                 return ResponseEntity.ok(items);
             }
         } catch (Exception e) {
-            log.error("Error al obtener todos los productos: {}", e.getMessage(), e);
+            log.error("Error al obtener todos los productos: " + e.getMessage(), e);
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return null;
     }
 }
