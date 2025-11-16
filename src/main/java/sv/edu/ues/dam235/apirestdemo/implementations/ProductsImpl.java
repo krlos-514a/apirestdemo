@@ -27,4 +27,30 @@ public class ProductsImpl implements ProductServices {
         }
         return result;
     }
+
+    @Override
+    public ProductsDTO createProduct(ProductsDTO productsDTO) {
+        Product product = new Product();
+        product.setName(productsDTO.getName());
+        product.setStatus(productsDTO.isStatus());
+        product = productRepository.save(product);
+        return new ProductsDTO(product.getCode(), product.getName(), product.isStatus());
+    }
+
+    @Override
+    public ProductsDTO updateProduct(Integer id, ProductsDTO productsDTO) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setName(productsDTO.getName());
+        product.setStatus(productsDTO.isStatus());
+        product = productRepository.save(product);
+        return new ProductsDTO(product.getCode(), product.getName(), product.isStatus());
+    }
+
+    @Override
+    public void deleteProduct(Integer id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        productRepository.delete(product);
+    }
 }
